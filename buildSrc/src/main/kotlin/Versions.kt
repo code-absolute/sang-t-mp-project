@@ -1,0 +1,16 @@
+object Versions {
+    const val slf4j = "1.7.36"
+    const val koinCore = "3.2.0"
+    const val koinAnnotations = "1.0.0-beta-2"
+    const val coroutines = "1.6.1"
+    const val gradlePlugin = "4.2.1"
+    const val kotlin = "1.5.0"
+    const val okhttp3LoggingInterceptor = "4.2.1"
+    const val jUnit = "5.8.1"
+    const val retrofit = "2.9.0"
+    const val quickbooks = "6.2.1"
+    const val mockk = "1.12.4"
+    const val featherIcons = "1.0.0"
+    const val exposed = "0.38.2"
+    const val h2Database = "2.1.212"
+}
