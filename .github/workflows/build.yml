@@ -20,7 +20,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: 'Sang-T MP (Windows.exe)'
-          path: 'D:\a\sang-t-mp\sang-t-mp\app\build\compose\binaries\main\exe\Sang-T MP1.0.0.exe'
+          path: 'D:\a\sang-t-mp-project\sang-t-mp-project\app\build\compose\binaries\main\exe\Sang-T MP-1.0.0.exe'
   build-windows-msi:
     runs-on: windows-latest
     permissions:
@@ -36,7 +36,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: 'Sang-T MP (Windows.msi)'
-          path: 'D:\a\sang-t-mp\sang-t-mp\app\build\compose\binaries\main\exe\Sang-T MP1.0.0.exe'
+          path: 'D:\a\sang-t-mp-project\sang-t-mp-project\app\build\compose\binaries\main\msi\Sang-T MP-1.0.0.msi'
   build-mac:
     runs-on: macos-latest
     steps:
@@ -50,4 +50,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: 'Sang-T MP (MacOS)'
-          path: '/Users/runner/work/sang-t-mp/sang-t-mp/app/build/compose/binaries/main/dmg/Sang-T MP-1.0.0.dmg'
+          path: '/Users/runner/work/sang-t-mp-project/sang-t-mp-project/app/build/compose/binaries/main/dmg/Sang-T MP-1.0.0.dmg'
