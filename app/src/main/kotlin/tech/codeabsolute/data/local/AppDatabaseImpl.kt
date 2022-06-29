@@ -42,7 +42,7 @@ class AppDatabaseImpl(
             Account(
                 name = "Marta Pilarska",
                 username = dataEncryption.encrypt("marta"),
-                password = dataEncryption.encrypt("12345")
+                password = dataEncryption.encrypt("s4ngr0ug3")
             )
         )
         return Resource.Success(data = null)

@@ -22,10 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.koin.java.KoinJavaComponent
-import tech.codeabsolute.model.AuthCode
-import tech.codeabsolute.presentation.main_menu.MainMenuViewModel
 import tech.codeabsolute.ui.theme.LightThemePrimary
-import tech.codeabsolute.util.QuickbooksAppPreferences
 import tech.codeabsolute.util.empty
 import java.io.File
 import java.util.prefs.Preferences

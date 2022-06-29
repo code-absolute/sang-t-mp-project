@@ -33,10 +33,11 @@ tasks.register("prepareKotlinBuildScriptModel") {
 
 compose.desktop {
     application {
-        mainClass = "MainKt"
+        mainClass = "tech.codeabsolute.MainKt"
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi)
-            packageName = "app"
+            modules("java.instrument", "java.naming", "java.net.http", "java.prefs", "java.security.jgss", "java.sql", "jdk.jfr", "jdk.jsobject", "jdk.unsupported", "jdk.unsupported.desktop", "jdk.xml.dom")
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Exe)
+            packageName = "Sang-T MP"
             packageVersion = "1.0.0"
         }
     }
