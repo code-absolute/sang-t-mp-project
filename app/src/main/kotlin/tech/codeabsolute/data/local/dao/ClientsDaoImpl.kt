@@ -4,6 +4,7 @@ import org.joda.time.DateTime
 import org.koin.core.annotation.Single
 import tech.codeabsolute.data.local.AppDatabase
 import tech.codeabsolute.model.Client
+import tech.codeabsolute.model.MedicareNumber
 import tech.codeabsolute.model.Requisition
 import tech.codeabsolute.model.SearchAttributes
 
@@ -46,8 +47,8 @@ class ClientsDaoImpl(
         return appDatabase.insertClient(client)
     }
 
-    override fun insertReferral(requisition: Requisition, clientId: Int) {
-        appDatabase.insertRequisition(requisition, clientId)
+    override fun insertReferral(requisition: Requisition, clientId: Int, medicareNumber: MedicareNumber) {
+        appDatabase.insertRequisition(requisition, clientId, medicareNumber)
     }
 
     override fun getClient(clientId: Int): Client? {
@@ -84,5 +85,17 @@ class ClientsDaoImpl(
 
     override suspend fun updateClientQuickbooksId(clientId: Int, quickbooksId: Int) {
         appDatabase.updateClientQuickbooksId(clientId, quickbooksId)
+    }
+
+    override fun updateRequisitions(clientId: Int, requisition: Requisition) {
+        appDatabase.updateClientRequisitions(clientId, requisition)
+    }
+
+    override fun deleteRequisition(requisition: Requisition) {
+        appDatabase.deleteRequisition(requisition)
+    }
+
+    override fun addRequisition(clientId: Int, requisition: Requisition, medicareNumber: MedicareNumber) {
+        appDatabase.addRequisition(clientId, requisition, medicareNumber)
     }
 }

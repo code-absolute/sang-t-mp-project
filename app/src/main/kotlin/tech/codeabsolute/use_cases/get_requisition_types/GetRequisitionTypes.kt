@@ -1,4 +1,4 @@
-package tech.codeabsolute.use_cases.create_client
+package tech.codeabsolute.use_cases.get_requisition_types
 
 import org.koin.core.annotation.Single
 import tech.codeabsolute.model.invoice_item.Item

@@ -1,6 +1,9 @@
 package tech.codeabsolute.presentation.clients
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -15,18 +18,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogState
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Search
-import org.koin.core.annotation.Single
 import org.koin.java.KoinJavaComponent
-import tech.codeabsolute.model.Client
 import tech.codeabsolute.model.SearchAttributes
 import tech.codeabsolute.presentation.common.InputField
-import tech.codeabsolute.presentation.common.RequisitionsTable
 import tech.codeabsolute.presentation.common.TableCellText
 import tech.codeabsolute.ui.theme.LightThemePrimary
+import java.awt.Desktop
+import java.io.IOException
+import java.net.URI
 
 @Composable
 fun ClientsSection(
@@ -223,6 +224,14 @@ fun ClientsTableHeaders() {
             color = Color.White
         )
         Text(
+            text = "Phone Number",
+            Modifier
+                .border(1.dp, Color.Black)
+                .weight(1f)
+                .padding(8.dp),
+            color = Color.White
+        )
+        Text(
             text = "Actions",
             Modifier
                 .border(1.dp, Color.Black)
@@ -238,61 +247,41 @@ fun ClientsTableResults(uiState: ClientsSectionState, onClientDetailsClick: (Int
     LazyColumn {
         itemsIndexed(uiState.clients) { index, client ->
 
-            val openDialog = remember { mutableStateOf(false) }
-            val openRequisitionsDialog = remember { mutableStateOf(false) }
-
-//            if (openDialog.value) {
-//                DetailsDialog(Modifier, openDialog, client)
-//            }
-            if (openRequisitionsDialog.value) {
-                RequisitionsDialog().invoke(client) {
-                    openRequisitionsDialog.value = false
-                }
-            }
-
             val backgroundColor = if (index % 2 == 0) Color.White else Color.LightGray
 
             Row(Modifier.height(IntrinsicSize.Min).background(backgroundColor)) {
                 TableCellText(text = client.medicareNumber.toString(), weight = 1f)
                 TableCellText(text = client.fullName.toString(), weight = 1f)
+                TableCellText(text = client.contactInfo.phoneNumber.toString(), weight = 1f)
                 Row(
                     Modifier.weight(1f)
                         .border(1.dp, Color.Black)
-                        .padding(8.dp)
+                        .padding(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Button(
-                        onClick = { openRequisitionsDialog.value = true },
-                        Modifier.weight(1f).padding(end = 8.dp)
-                    ) {
-                        Text("Requisitions")
-                    }
                     Button(
                         onClick = { onClientDetailsClick(client.id) },
                         Modifier.weight(1f)
                     ) {
                         Text("Details")
                     }
+                    Button(
+                        onClick = {
+                            if (Desktop.isDesktopSupported()) {
+                                try {
+                                    Desktop.getDesktop().browse(
+                                        URI("https://app.qbo.intuit.com/app/customerdetail?nameId=${client.quickbooksId}")
+                                    )
+                                } catch (ex: IOException) {
+                                    // no application registered for browsing
+                                }
+                            }
+                        },
+                        Modifier.weight(1f)
+                    ) {
+                        Text("Invoice")
+                    }
                 }
-            }
-        }
-    }
-}
-
-@Single
-class RequisitionsDialog {
-
-    @Composable
-    operator fun invoke(client: Client, onCloseRequest: () -> Unit = {}) {
-        Dialog(
-            onCloseRequest = onCloseRequest,
-            title = "Requisitions",
-            state = DialogState(width = 1000.dp, height = 600.dp)
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp).verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                RequisitionsTable(client)
             }
         }
     }

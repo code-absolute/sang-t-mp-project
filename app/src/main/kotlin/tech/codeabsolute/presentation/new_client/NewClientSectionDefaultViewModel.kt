@@ -11,7 +11,6 @@ import tech.codeabsolute.domain.model.FullName
 import tech.codeabsolute.domain.model.PhoneNumber
 import tech.codeabsolute.model.*
 import tech.codeabsolute.use_cases.create_client.CreateClientUseCase
-import tech.codeabsolute.use_cases.create_client.GetRequisitionTypesUseCase
 import tech.codeabsolute.use_cases.validation.ValidationResult
 import tech.codeabsolute.use_cases.validation.ValidationUseCases
 import tech.codeabsolute.util.Resource

@@ -7,5 +7,7 @@ data class Line(
     @SerializedName("DetailType")
     val detailType: String = "",
     @SerializedName("SalesItemLineDetail")
-    val salesItemLineDetail: SalesItemLineDetail = SalesItemLineDetail()
+    val salesItemLineDetail: SalesItemLineDetail = SalesItemLineDetail(),
+    @SerializedName("Description")
+    val description: String = ""
 )

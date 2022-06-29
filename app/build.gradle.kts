@@ -31,8 +31,6 @@ tasks.register("prepareKotlinBuildScriptModel") {
     // https://youtrack.jetbrains.com/issue/KTIJ-16480
 }
 
-
-
 compose.desktop {
     application {
         mainClass = "MainKt"

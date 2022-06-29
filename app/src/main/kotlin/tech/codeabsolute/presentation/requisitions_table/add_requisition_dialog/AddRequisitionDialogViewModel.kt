@@ -13,7 +13,7 @@ import org.jetbrains.skiko.MainUIDispatcher
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import tech.codeabsolute.model.Requisition
-import tech.codeabsolute.use_cases.create_client.GetRequisitionTypesUseCase
+import tech.codeabsolute.use_cases.get_requisition_types.GetRequisitionTypesUseCase
 import tech.codeabsolute.util.empty
 
 class AddRequisitionDialogViewModel(
@@ -25,6 +25,8 @@ class AddRequisitionDialogViewModel(
             displayedRequisitionPath = "No file selected"
         )
     )
+
+    var existingRequisitionId: Int? = null
 
     init {
         uiState = uiState.copy(isLoading = true)
@@ -40,6 +42,7 @@ class AddRequisitionDialogViewModel(
 
                         val type = if (event.requisition != null) {
                             setFieldValues(event.requisition)
+                            existingRequisitionId = event.requisition.id
                             types.first { it.id == event.requisition.typeId }
                         } else {
                             types.first()
@@ -119,6 +122,7 @@ class AddRequisitionDialogViewModel(
         }
 
         return Requisition(
+            id = existingRequisitionId ?: -1,
             path = uiState.requisitionPath,
             typeId = uiState.requisitionType.id,
             typeName = uiState.requisitionType.name,
@@ -172,7 +176,7 @@ class AddRequisitionDialogViewModel(
         } ?: String.empty()
 
         onEvent(AddRequisitionDialogEvent.OnFileSelected(requisition.path))
-        onEvent(AddRequisitionDialogEvent.OnTypeChanged(types.first { it.id == requisition.typeId }))
+        onEvent(AddRequisitionDialogEvent.OnTypeChanged(types.firstOrNull { it.id == requisition.typeId } ?: types[0]))
         onEvent(AddRequisitionDialogEvent.OnIsTestedCheckChanged(testDate.isNotEmpty()))
         onEvent(AddRequisitionDialogEvent.OnTestDateChanged(testDate))
         onEvent(AddRequisitionDialogEvent.OnTestTimeChanged(testTime))

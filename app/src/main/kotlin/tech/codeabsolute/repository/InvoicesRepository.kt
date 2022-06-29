@@ -13,12 +13,12 @@ class InvoicesRepository(
                 CustomerRef(customer.id),
                 listOf(
                     Line(
-                        40.0,
-                        "SalesItemLineDetail",
-                        SalesItemLineDetail(
+                        //40.0,
+                        detailType = "SalesItemLineDetail",
+                        salesItemLineDetail = SalesItemLineDetail(
                             ItemRef(
-                                "Services",
-                                "1"
+                                "Requisition:Blood test",
+                                "4"
                             )
                         )
                     )

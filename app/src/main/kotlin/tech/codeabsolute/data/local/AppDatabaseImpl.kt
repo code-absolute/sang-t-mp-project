@@ -9,11 +9,9 @@ import tech.codeabsolute.data.local.tables.Clients.toClient
 import tech.codeabsolute.data.local.tables.Requisitions
 import tech.codeabsolute.data.local.tables.Requisitions.toRequisition
 import tech.codeabsolute.encryption.DataEncryption
-import tech.codeabsolute.model.Account
-import tech.codeabsolute.model.Client
-import tech.codeabsolute.model.DatabaseInfo
-import tech.codeabsolute.model.Requisition
+import tech.codeabsolute.model.*
 import tech.codeabsolute.util.Resource
+import java.io.File
 
 class AppDatabaseImpl(
     private val dataEncryption: DataEncryption
@@ -21,7 +19,7 @@ class AppDatabaseImpl(
 
     private val userHomeDirectory = System.getProperty("user.home")
     private val name = "sang_t_mp_debug_db"
-    private val directory = "$userHomeDirectory/Sang-T MP debug/"
+    private val directory = "$userHomeDirectory/Sang-T MP/"
 
     private val databaseInfo = DatabaseInfo(
         name = name,
@@ -88,7 +86,7 @@ class AppDatabaseImpl(
             Clients.select {
                 Clients.id eq clientId
             }.map {
-                it.toClient(getReferrals(clientId))
+                it.toClient(getRequisitions(clientId))
             }.firstOrNull()
         }
     }
@@ -101,7 +99,7 @@ class AppDatabaseImpl(
         }
 
         client.requisitions.forEach { requisition ->
-            insertRequisition(requisition, insertedPatientId)
+            insertRequisition(requisition, insertedPatientId, client.medicareNumber)
         }
 
         return client.copy(id = insertedPatientId)
@@ -112,19 +110,32 @@ class AppDatabaseImpl(
             Clients
                 .selectAll()
                 .orderBy(Clients.createdOn)
-                .map { it.toClient(getReferrals(it[Clients.id])) }
+                .map { it.toClient(getRequisitions(it[Clients.id])) }
         }
     }
 
-    override fun insertRequisition(requisition: Requisition, clientId: Int) {
+    override fun insertRequisition(requisition: Requisition, clientId: Int, medicareNumber: MedicareNumber) {
         transaction {
             Requisitions.insert {
                 it.insert(requisition, clientId)
             }
         }
+
+        val filePath = "${databaseInfo.directory}/documents/${medicareNumber.number}/requisitions/"
+        val directory = File(filePath)
+        directory.mkdirs()
+
+        val file = File(filePath, requisition.path.substringAfterLast('/'))
+        file.createNewFile()
+
+        File(requisition.path).inputStream().use { input ->
+            file.outputStream().use { output ->
+                input.copyTo(output)
+            }
+        }
     }
 
-    private fun getReferrals(patientId: Int): List<Requisition> =
+    private fun getRequisitions(patientId: Int): List<Requisition> =
         Requisitions
             .select { Requisitions.patientId eq patientId }
             .map { it.toRequisition() }
@@ -134,6 +145,29 @@ class AppDatabaseImpl(
             Clients.update({ Clients.id eq clientId }) {
                 it[this.quickbooksId] = quickbooksId
             }
+        }
+    }
+
+    override fun updateClientRequisitions(clientId: Int, requisition: Requisition) {
+        transaction {
+            Requisitions.update({ Requisitions.id eq requisition.id }) {
+                it[path] = requisition.path
+                it[typeId] = requisition.typeId
+                it[typeName] = requisition.typeName
+                it[testedOn] = requisition.testedOn
+            }
+        }
+    }
+
+    override fun deleteRequisition(requisition: Requisition) {
+        transaction {
+            Requisitions.deleteWhere { Requisitions.id eq requisition.id }
+        }
+    }
+
+    override fun addRequisition(clientId: Int, requisition: Requisition, medicareNumber: MedicareNumber) {
+        transaction {
+            insertRequisition(requisition, clientId, medicareNumber)
         }
     }
 }

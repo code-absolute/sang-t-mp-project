@@ -28,7 +28,8 @@ import tech.codeabsolute.use_cases.authenticate_local_user.AuthenticateLocalUser
 import tech.codeabsolute.use_cases.authenticate_local_user.AuthenticateLocalUserUseCase
 import tech.codeabsolute.use_cases.authenticate_user.AuthenticateQuickbooksUser
 import tech.codeabsolute.use_cases.authenticate_user.AuthenticateQuickbooksUserUseCase
-import tech.codeabsolute.use_cases.create_client.GetRequisitionTypesUseCase
+import tech.codeabsolute.use_cases.create_invoice.CreateInvoiceUseCase
+import tech.codeabsolute.use_cases.get_requisition_types.GetRequisitionTypesUseCase
 import tech.codeabsolute.use_cases.get_authentication_url.GetQuickbooksAuthenticationRequestUrl
 import tech.codeabsolute.use_cases.get_authentication_url.GetQuickbooksAuthenticationRequestUrlUseCase
 import tech.codeabsolute.use_cases.get_client.GetClient
@@ -126,6 +127,6 @@ class AppKoinModule : AppModule {
         AddRequisitionDialogViewModel(getRequisitionTypesUseCase)
 
     @Single
-    fun provideRequisitionsTableViewModel(): RequisitionsTableViewModel =
-        RequisitionsTableViewModel()
+    fun provideRequisitionsTableViewModel(createInvoiceUseCase: CreateInvoiceUseCase): RequisitionsTableViewModel =
+        RequisitionsTableViewModel(createInvoiceUseCase)
 }

@@ -7,14 +7,19 @@ sealed class RequisitionsTableEvent {
     object CloseAddRequisitionDialog : RequisitionsTableEvent()
     data class AddRequisition(
         val requisition: Requisition,
-        val onRequisitionsListChanged: (List<Requisition>) -> Unit
+        val onRequisitionsListChanged: (Requisition, List<Requisition>) -> Unit,
+        val onAddRequisition: (Requisition) -> Unit
     ) : RequisitionsTableEvent()
 
     data class EditRequisition(
         val requisition: Requisition,
-        val onRequisitionsListChanged: (List<Requisition>) -> Unit
+        val onRequisitionsListChanged: (Requisition, List<Requisition>) -> Unit
     ) : RequisitionsTableEvent()
 
-    data class OpenEditRequisitionDialog(val requisition: Requisition) : RequisitionsTableEvent()
+    data class OpenEditRequisitionDialog(val requisitionIndex: Int) : RequisitionsTableEvent()
     data class LoadExistingRequisitions(val requisitions: List<Requisition>?) : RequisitionsTableEvent()
+    data class OnDeleteRequisition(
+        val requisition: Requisition,
+        val onRequisitionsListChanged: (Requisition, List<Requisition>) -> Unit
+    ) : RequisitionsTableEvent()
 }

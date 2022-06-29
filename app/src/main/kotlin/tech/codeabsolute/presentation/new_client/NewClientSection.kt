@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.AwtWindow
 import org.koin.java.KoinJavaComponent
 import tech.codeabsolute.presentation.common.ErrorText
-import tech.codeabsolute.presentation.common.NewRequisitionsTable
+import tech.codeabsolute.presentation.common.RequisitionsTable
 import tech.codeabsolute.ui.theme.LightThemePrimary
 import java.awt.FileDialog
 import java.awt.Frame
@@ -100,9 +100,10 @@ fun ReferralsView(
     ) {
         Text("Requisitions", fontWeight = FontWeight.Bold, fontSize = 28.sp)
 
-        NewRequisitionsTable {
-            viewModel.onEvent(NewClientSectionEvent.OnRequisitionsListChanged(it))
-        }
+        RequisitionsTable(
+            onRequisitionsListChanged = { _, list ->
+                viewModel.onEvent(NewClientSectionEvent.OnRequisitionsListChanged(list))
+            }, onRequisitionDeleted = {}, onAddRequisition = {})
     }
 }
 

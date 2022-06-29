@@ -3,10 +3,10 @@ package tech.codeabsolute.presentation.client_details
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -14,14 +14,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.AwtWindow
 import org.joda.time.format.DateTimeFormat
 import org.koin.java.KoinJavaComponent
 import tech.codeabsolute.model.Client
-import tech.codeabsolute.presentation.common.NewRequisitionsTable
+import tech.codeabsolute.model.Requisition
 import tech.codeabsolute.presentation.common.RequisitionsTable
-import java.awt.FileDialog
-import java.awt.Frame
 
 @Composable
 fun ClientDetailsSection(
@@ -56,7 +53,14 @@ fun ClientDetailsSection(
             if (client.address != null) {
                 ClientDetailsAddress(client)
             }
-            ClientDetailsRequisitions(client)
+            ClientDetailsRequisitions(client,
+                { requisition ->
+                    viewModel.updateRequisitions(client.id, requisition)
+                }, {
+                    viewModel.deleteRequisition(it)
+                }, {
+                    viewModel.addRequisition(client.id, it)
+                })
         }
     }
 }
@@ -117,7 +121,12 @@ fun ClientDetailsAddress(client: Client) {
 }
 
 @Composable
-fun ClientDetailsRequisitions(client: Client) {
+fun ClientDetailsRequisitions(
+    client: Client,
+    onRequisitionsListChanged: (Requisition) -> Unit,
+    onRequisitionDeleted: (Requisition) -> Unit,
+    onAddRequisition: (Requisition) -> Unit
+) {
     Column(
         modifier = Modifier.shadow(elevation = 6.dp, shape = RoundedCornerShape(4), clip = true)
             .border(border = BorderStroke(1.dp, Color.Gray), shape = RoundedCornerShape(4))
@@ -125,56 +134,11 @@ fun ClientDetailsRequisitions(client: Client) {
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text("Requisitions", fontWeight = FontWeight.Bold, fontSize = 28.sp)
-        RequisitionsTable(client)
 
-        NewRequisitionsTable(client.requisitions) {
-
-        }
-
-        val isFileChooserOpen = remember { mutableStateOf(false) }
-
-        if (isFileChooserOpen.value) {
-            FileDialog(
-                onCloseRequest = {
-                    isFileChooserOpen.value = false
-                    if (it != null) {
-                        //viewModel.addRequisition(Requisition(it), client.id)
-                    }
-                }
-            )
-        }
-
-        Button(onClick = {
-            isFileChooserOpen.value = true
-        }) {
-            Text("Add")
-        }
+        RequisitionsTable(client,
+            onRequisitionsListChanged = { requisition, _ -> onRequisitionsListChanged(requisition) },
+            onRequisitionDeleted = { onRequisitionDeleted(it) },
+            onAddRequisition = { onAddRequisition(it) }
+        )
     }
-}
-
-@Composable
-fun FileDialog(
-    parent: Frame? = null,
-    onCloseRequest: (result: String?) -> Unit
-) {
-    val fileDialog = object : FileDialog(parent, "Choose a file", LOAD) {
-        override fun setVisible(value: Boolean) {
-            super.setVisible(value)
-            if (value) {
-                if (directory != null && file != null) {
-                    onCloseRequest(directory + file)
-                } else {
-                    onCloseRequest(null)
-                }
-            }
-        }
-    }
-    fileDialog.setFilenameFilter { _, name ->
-        name.endsWith(".pdf")
-    }
-
-    AwtWindow(
-        create = { fileDialog },
-        dispose = FileDialog::dispose
-    )
 }

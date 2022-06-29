@@ -13,6 +13,7 @@ import tech.codeabsolute.presentation.clients.ClientsSection
 import tech.codeabsolute.presentation.main_menu.MainMenu
 import tech.codeabsolute.presentation.main_menu.Section
 import tech.codeabsolute.presentation.new_client.NewClientSection
+import tech.codeabsolute.presentation.settings.SettingsSection
 
 @Composable
 fun HomeScreen(
@@ -37,20 +38,8 @@ fun HomeScreen(
                     viewModel.onEvent(HomeScreenEvent.ChangeSection(Section.ClientDetails(it)))
                 }
                 Section.Reports -> {}
-                Section.Settings -> {}
+                Section.Settings -> SettingsSection()
             }
         }
-
-        //            Section.Clients -> ClientsListSection {
-//                section = Section.ClientDetails(it)
-//            }
-//            Section.NewClient -> NewClientSection {
-//                section = Section.ClientDetails(it)
-//            }
-//            is Section.ClientDetails -> ClientDetailsSection(
-//                (section as Section.ClientDetails).clientId
-//            )
-//            Section.Reports -> ReportsSection()
-//            Section.Settings -> SettingsSection()
     }
 }

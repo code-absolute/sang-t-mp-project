@@ -97,6 +97,39 @@ class ClientsRepositoryImpl(
         return quickbooksDataSource.getInvoiceItems()
     }
 
+    override fun createInvoice(quickbooksClientId: Int, requisition: Requisition): Flow<Resource<String>> = flow {
+        emit(Resource.Loading())
+        val types = getRequisitionTypes()
+
+        val item = types.first { it.id == requisition.typeId }
+
+        val invoiceRequest = InvoiceRequest(
+            CustomerRef(quickbooksClientId.toString()),
+            listOf(
+                Line(
+                    detailType = "SalesItemLineDetail",
+                    salesItemLineDetail = SalesItemLineDetail(
+                        ItemRef(
+                            item.name,
+                            item.id
+                        ),
+                        TaxCodeRef(
+                            item.salesTaxCodeRef.value
+                        ),
+                        quantity = 1,
+                    ),
+                    amount = item.unitPrice,
+                    description = item.description
+                )
+            )
+        )
+        quickbooksDataSource.createInvoice(invoiceRequest)
+    }
+
+    override fun updateRequisitions(clientId: Int, requisition: Requisition) {
+        clientsDao.updateRequisitions(clientId, requisition)
+    }
+
     private fun Customer.toClient(client: Client) = Client(
         fullName = FullName(
             firstName = givenName,
