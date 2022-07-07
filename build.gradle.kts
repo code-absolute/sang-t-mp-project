@@ -45,6 +45,12 @@ subprojects {
         testImplementation(Dependencies.mockk)
     }
 
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions {
+            jvmTarget = "11"
+        }
+    }
+
     tasks.getByName<Test>("test") {
         useJUnitPlatform()
     }
