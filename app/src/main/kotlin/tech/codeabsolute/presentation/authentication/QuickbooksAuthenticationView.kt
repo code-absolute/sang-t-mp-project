@@ -23,6 +23,7 @@ import netscape.javascript.JSObject
 import tech.codeabsolute.model.Url
 import java.awt.BorderLayout
 import java.awt.Container
+import java.awt.Desktop
 import java.net.URI
 import javax.swing.JPanel
 
@@ -73,38 +74,38 @@ private fun JavaFXPanel(
     panel: JFXPanel,
     onCreate: () -> Unit
 ) {
-    val container = remember { JPanel() }
-    val density = LocalDensity.current.density
-
-    Layout(
-        content = {},
-        modifier = Modifier.onGloballyPositioned { childCoordinates ->
-            val coordinates = childCoordinates.parentCoordinates
-            val location = coordinates?.localToWindow(Offset.Zero)?.round() ?: IntOffset.Zero
-            val size = coordinates?.size ?: IntSize.Zero
-            container.setBounds(
-                (location.x / density).toInt(),
-                (location.y / density).toInt(),
-                (size.width / density).toInt(),
-                (size.height / density).toInt()
-            )
-            container.validate()
-            container.repaint()
-        },
-        measurePolicy = { _, _ ->
-            layout(0, 0) {}
-        }
-    )
-
-    DisposableEffect(Unit) {
-        container.apply {
-            layout = BorderLayout(0, 0)
-            add(panel)
-        }
-        root.add(container)
-        onCreate.invoke()
-        onDispose {
-            root.remove(container)
-        }
-    }
+//    val container = remember { JPanel() }
+//    val density = LocalDensity.current.density
+//
+//    Layout(
+//        content = {},
+//        modifier = Modifier.onGloballyPositioned { childCoordinates ->
+//            val coordinates = childCoordinates.parentCoordinates
+//            val location = coordinates?.localToWindow(Offset.Zero)?.round() ?: IntOffset.Zero
+//            val size = coordinates?.size ?: IntSize.Zero
+//            container.setBounds(
+//                (location.x / density).toInt(),
+//                (location.y / density).toInt(),
+//                (size.width / density).toInt(),
+//                (size.height / density).toInt()
+//            )
+//            container.validate()
+//            container.repaint()
+//        },
+//        measurePolicy = { _, _ ->
+//            layout(0, 0) {}
+//        }
+//    )
+//
+//    DisposableEffect(Unit) {
+//        container.apply {
+//            layout = BorderLayout(0, 0)
+//            add(panel)
+//        }
+//        root.add(container)
+//        onCreate.invoke()
+//        onDispose {
+//            root.remove(container)
+//        }
+//    }
 }
