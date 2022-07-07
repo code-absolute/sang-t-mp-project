@@ -7,8 +7,8 @@ plugins {
 }
 
 javafx {
-    version = "16"
-    modules = listOf("javafx.web", "javafx.swing")
+    version = "17.0.1"
+    modules = listOf("javafx.web", "javafx.swing", "javafx.controls")
 }
 
 dependencies {
