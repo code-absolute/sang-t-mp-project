@@ -9,7 +9,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.jetbrains.skiko.MainUIDispatcher
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import tech.codeabsolute.model.Requisition
@@ -38,7 +37,7 @@ class AddRequisitionDialogViewModel(
                 uiState = uiState.copy(isLoading = true)
                 CoroutineScope(Dispatchers.IO).launch {
                     val types = getRequisitionTypesUseCase()
-                    withContext(MainUIDispatcher) {
+                    withContext(Dispatchers.Main) {
 
                         val type = if (event.requisition != null) {
                             setFieldValues(event.requisition)
@@ -60,7 +59,7 @@ class AddRequisitionDialogViewModel(
                 uiState = uiState.copy(isLoading = true)
                 CoroutineScope(Dispatchers.IO).launch {
                     val types = getRequisitionTypesUseCase()
-                    withContext(MainUIDispatcher) {
+                    withContext(Dispatchers.Main) {
                         uiState = uiState.copy(
                             isLoading = false,
                             requisitionTypes = types,
