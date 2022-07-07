@@ -37,31 +37,31 @@ fun QuickbooksAuthenticationView(composeWindow: ComposeWindow, url: Url, respons
             panel = jfxpanel,
             // function to initialize JFXPanel, Group, Scene
             onCreate = {
-                Platform.runLater {
-                    val root = WebView()
-                    val engine = root.engine
-                    val scene = Scene(root)
-                    engine.loadWorker.stateProperty().addListener { _, _, newState ->
-                        if (newState === Worker.State.SUCCEEDED) {
-                            val jsObject = root.engine.executeScript("window") as JSObject
-                        }
-                    }
-                    engine.loadWorker.exceptionProperty().addListener { _, _, newError ->
-                        println("page load error : $newError")
-                    }
-                    engine.locationProperty().addListener { _, _, newLocation ->
-                        println("location : $newLocation")
-                        val uri = URI(newLocation)
-                        val host = uri.host
-
-                        if (host == "codeabsolute.tech") {
-                            response(uri)
-                        }
-                    }
-                    jfxpanel.scene = scene
-                    engine.load(url.value)
-                    engine.setOnError { error -> println("onError : $error") }
-                }
+//                Platform.runLater {
+//                    val root = WebView()
+//                    val engine = root.engine
+//                    val scene = Scene(root)
+//                    engine.loadWorker.stateProperty().addListener { _, _, newState ->
+//                        if (newState === Worker.State.SUCCEEDED) {
+//                            val jsObject = root.engine.executeScript("window") as JSObject
+//                        }
+//                    }
+//                    engine.loadWorker.exceptionProperty().addListener { _, _, newError ->
+//                        println("page load error : $newError")
+//                    }
+//                    engine.locationProperty().addListener { _, _, newLocation ->
+//                        println("location : $newLocation")
+//                        val uri = URI(newLocation)
+//                        val host = uri.host
+//
+//                        if (host == "codeabsolute.tech") {
+//                            response(uri)
+//                        }
+//                    }
+//                    jfxpanel.scene = scene
+//                    engine.load(url.value)
+//                    engine.setOnError { error -> println("onError : $error") }
+//                }
             }
         )
     }
