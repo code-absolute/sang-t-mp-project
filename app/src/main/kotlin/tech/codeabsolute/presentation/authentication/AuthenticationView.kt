@@ -3,6 +3,7 @@ package tech.codeabsolute.presentation.authentication
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -36,11 +37,11 @@ fun AuthenticationView(
             } else if (uiState.isQuickbooksAuthenticated) {
                 LoginScreen { viewModel.onEvent(AuthenticationEvent.Login) }
             } else {
-                QuickbooksAuthenticationView(composeWindow, uiState.url) { redirectURI ->
-                    viewModel.onEvent(AuthenticationEvent.QuickbooksLogin(redirectURI))
-                }
+//                QuickbooksAuthenticationView(composeWindow, uiState.url) { redirectURI ->
+//                    viewModel.onEvent(AuthenticationEvent.QuickbooksLogin(redirectURI))
+//                }
+                Text("QuickbooksAuthenticationView")
             }
         }
     }
 }
-//code=AB11656381118s6SRD536b2irqbdtE8dCsyNkeSgHhsN8Nz0tX&state=7b2b6603-0dda-499f-88af-7fa932b99caf&realmId=4620816365227933210
