@@ -18,7 +18,7 @@ class AppDatabaseImpl(
 ) : AppDatabase {
 
     private val userHomeDirectory = System.getProperty("user.home")
-    private val name = "sang_t_mp_debug_db"
+    private val name = "sang_t_mp_db"
     private val directory = "$userHomeDirectory/Sang-T MP/"
 
     private val databaseInfo = DatabaseInfo(
